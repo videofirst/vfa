@@ -69,7 +69,8 @@ Feature: Search Films
 ```
 
 VFA outputs standard BDD format i.e. _Feature_ (e.g. `Search Films`) -> _Scenarios_
-(e.g. `Search for Film The Green Mile`) -> _Steps_ (e.g. `Given a user is at the homepage`).    
+(e.g. `Search for Film The Green Mile`) -> _Steps_ (e.g. `Given a user is at the homepage`).
+
 A unique feature of VFA are actions (e.g. `open ("https://www.imdb.com")`) and how they are displayed i.e. high level
 steps are shown on the left (which anyone can understand) and lower level actions are displayed on the right-hand-side (
 useful for engineers / testers).

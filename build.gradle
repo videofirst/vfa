@@ -6,7 +6,6 @@ buildscript {
 }
 
 allprojects {
-    group = 'io.videofirst.vfa'
     version = "$version"
     ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 

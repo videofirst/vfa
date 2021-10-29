@@ -23,7 +23,7 @@ dependencies {
 
     testAnnotationProcessor "io.videofirst.vfa:core:2021.1"
     testImplementation "io.videofirst.vfa:core:2021.1"
-    testImplementation "io.videofirst.vfa:actions-web-selenide:2021.1"
+    testImplementation "io.videofirst.vfa.actions:web-selenide:2021.1"
 
 }
 

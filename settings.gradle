@@ -8,4 +8,4 @@
 rootProject.name = 'vfa'
 
 include "core"
-include "actions-web-selenide"
+include "actions:web-selenide"

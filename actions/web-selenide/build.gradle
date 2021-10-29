@@ -2,6 +2,8 @@ plugins {
     id 'io.micronaut.library' version "2.0.8"
     id 'maven-publish'
 }
+
+group = 'io.videofirst.vfa.actions'
 description = "VFA Action Library - Web (Selenide)"
 
 publishing {

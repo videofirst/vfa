@@ -8,6 +8,8 @@ plugins {
 //    mergeServiceFiles()
 //}
 
+
+group = 'io.videofirst.vfa'
 description = "VFA core module"
 
 publishing {
