@@ -1,0 +1,37 @@
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+apply plugin: "java"
+apply plugin: "idea"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+group = 'io.vfa.examples'
+version = "$version"
+
+dependencies {
+
+//    testCompileOnly "org.projectlombok:lombok:1.18.20"
+//    testAnnotationProcessor "org.projectlombok:lombok:1.18.20"
+
+    testAnnotationProcessor "io.videofirst.vfa:core:2021.1"
+    testImplementation "io.videofirst.vfa:core:2021.1"
+    testImplementation "io.videofirst.vfa:actions-web-selenide:2021.1"
+
+}
+
+compileJava.options.encoding = 'UTF-8'
+
+test {
+    useJUnitPlatform()
+    systemProperty "file.encoding", "utf-8"
+}
+
+

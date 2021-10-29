@@ -1,0 +1,11 @@
+//pluginManagement {
+//    repositories {
+//        gradlePluginPortal()
+//        mavenCentral()
+//    }
+//}
+
+rootProject.name = 'vfa'
+
+include "core"
+include "actions-web-selenide"

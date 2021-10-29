@@ -1,0 +1,160 @@
+# IMDB config
+
+imdb:
+  homepage: https://www.imdb.com
+
+# VFA properties
+
+# NOTE - Deploying as a library will include doing something like this: -
+#   https://medium.com/agorapulse-stories/how-to-set-the-default-configuration-properties-for-a-micronaut-library-8a7914ea2050
+
+vfa:
+
+  # -------------------------------------------------------------------------------
+  # 1) Top level properties
+  # -------------------------------------------------------------------------------
+
+  # Turning strict-mode on. When on, all features, scenarios must have an id which
+  # exists in a VF project (recommended).         - FIXME TODO
+  strict-mode: false
+
+  # -------------------------------------------------------------------------------
+  # 2) Reports properties
+  # -------------------------------------------------------------------------------
+
+  reports:
+
+    # What type of media?  Currently supports "screenshots", will support"video" in
+    # the future
+    media: screenshots
+
+    # Folder where report assets are stored
+    folder: "reports/vfa"
+
+  # -------------------------------------------------------------------------------
+  # 3) Exception handling properties
+  # -------------------------------------------------------------------------------
+
+  exceptions:
+
+    # Position of logs ("inline" or "bottom")
+    position: "inline"
+
+    # Regular expression for core exception ignores.  This list shouldn't change between projects.
+    core-ignores:
+      - "org\\.junit.*"
+      - "io\\.micronaut\\.(aop|context).*"
+      - "java\\.(util|lang).*"
+      - "io\\.videofirst\\.vfa\\.(?!examples).*"   # ignore all vfa classes (except examples)
+      - ".*\\.reflect.*"
+      - "com\\.sun.*"
+      - "com\\.intellij.*"
+      - "org\\.gradle\\..*"
+      - ".*\\.\\$\\w+\\$.*"     # Synthetic classes
+      - ".*convertThrowable.*"
+      # FIXME put it's own web module hierarchy - com.codeborne.selenide.impl
+      - "com\\.codeborne\\.selenide\\.impl.*"
+
+    # Optional ignores - enables each project to have specific additional ignores.  List of regular
+    # expressions in same format as `core-ignores`.
+    ignores:
+
+    # Number of parts of a fully-qualified class name to display in an exception trace.  This
+    # ensures that we only show what is necessary (-1 = show every part). Note, the root package is
+    # always displayed.  For example, if `show-parts` = 2 then the following stacktrace ...
+    #
+    #     com.amazon.user.tests.SearchFeature.search_by_id
+    #
+    # ... will be abbreviated to ...
+    #
+    #     com.a.u.t.SearchFeature.search_by_id
+    show-parts: 2
+
+    # Boolean to denote if we show the full stack track or not (can be useful for debugging)
+    show-full: false
+
+  # -------------------------------------------------------------------------------
+  # 4) Logger properties
+  # -------------------------------------------------------------------------------
+
+  logger:
+
+    # Level (none, scenario, step, action)        - FIXME TODO
+    level: action
+
+    # Which theme to display (plain, standard)
+    theme: standard
+
+    # Max level of actions to show (-1 = no limit)
+    action-depth: 2
+
+    # Number of characters to start the right column (increase if step text is longer)
+    right-column-chars: 75
+
+    # Number of characters to indent each level (normally 2 or 4)
+    indent-chars: 2
+
+    # Number of characters to indent stacktrace
+    # NOTE: only applicable if 'vfa.exceptions.position' = 'bottom')
+    indent-stacktrace: 10
+
+    # Boolean to show if we add quotes around parameters.  Can be overridden using @Step(addQuotes) annotation field
+    # or as an options parameter in a static `step(params, options, text)` call.
+    step-add-quotes: true
+
+    # Aliases to ignore
+    ignore-aliases:
+      - "web"
+
+    # Themes (based loosely on https://github.com/radarsh/gradle-test-logger-plugin)
+    themes:
+
+      # Plain theme (no colours / uni-code characters)
+      plain:
+        use-colours: false
+        labels:
+          status-passed: "√"
+          status-failed: "X"
+          status-error: "!"
+          status-ignored: ""
+
+      # Standard theme (colours + uni-code characters)
+      standard:
+        use-colours: true
+        labels:
+          status-passed: "✔"
+          status-failed: "✘"
+          status-error: "❗"
+          status-ignored: ""
+        colours:
+          feature-label: "#9999ee"
+          feature-colon: "#666666"
+          feature-text: "#eeeeee"
+          feature-description: "#bbbbbb"
+          feature-id: "#9999ee"
+          scenario-label: "#5599ee"
+          scenario-colon: "#666666"
+          scenario-text: "#eeeeee"
+          scenario-id: "#5599ee"
+          step-label: "#88aacc"
+          step-label-other: "#777777"
+          step-text: "#bbbbbb"
+          step-param-string: "#668855"
+          step-param-other: "#cc7733"
+          action-alias: "#aa77aa"
+          action-dot: "#bbbbbb"
+          action-method: "#bbbbbb"
+          action-brackets: "#bbbbbb"
+          action-param-string: "#668855"
+          action-param-other: "#cc7733"
+          action-comma: "#cccc66"
+          action-ignored: "#777777"
+          status-passed: "#499c54"
+          status-failed: "#bd8e3e"
+          status-error: "#cc4444"
+          status-ignored: "#777777"
+          right-colon: "#666666"
+
+          #step-param-string: "#cc7733"    # orange
+          #action-param-other: "#ffcc66"   # yellow
+          #action-param-other: "#6699bb"  blue
