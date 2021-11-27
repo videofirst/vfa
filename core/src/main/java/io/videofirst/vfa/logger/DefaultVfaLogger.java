@@ -3,7 +3,6 @@ package io.videofirst.vfa.logger;
 import static com.diogonunes.jcolor.Ansi.colorize;
 import static io.videofirst.vfa.util.VfaUtils.repeat;
 
-import com.diogonunes.jcolor.Attribute;
 import io.videofirst.vfa.enums.StepType;
 import io.videofirst.vfa.enums.VfaExceptionPosition;
 import io.videofirst.vfa.enums.VfaStatus;
@@ -54,7 +53,8 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
 
     private VfaTheme theme;
     private String indentSpaces;
-    private StringBuilder line = new StringBuilder();
+    private StringBuilder line = new StringBuilder();  // Pure text line
+    private StringBuilder formattedLine = new StringBuilder(); // Formatted line
 
     @PostConstruct
     public void init() {
@@ -418,17 +418,18 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
 
     protected void print(String input, String themeColour) {
         line.append(input);
-        if (theme.isUseColours() && themeColour != null) {
-            Attribute attribute = theme.getColourAttribute(themeColour);
-            System.out.print(colorize(input, attribute));
+        if (themeColour != null && theme.getColourAttribute(themeColour) != null) {
+            //System.out.print(colorize(input, attribute));   // real-time but strangeness with Gradle
+            formattedLine.append(colorize(input, theme.getColourAttribute(themeColour)));
         } else {
-            System.out.print(input);
+            //System.out.print(input);       // real-time but strangeness with Gradle
+            formattedLine.append(input);
         }
-        System.out.flush();
+        //System.out.flush();         // real-time but strangeness with Gradle
     }
 
     protected void println() {
-        System.out.println();
+        System.out.println(formattedLine);
         resetLine();
     }
 
@@ -444,6 +445,7 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
 
     protected void resetLine() {
         line.setLength(0);
+        formattedLine.setLength(0);
     }
 
 }

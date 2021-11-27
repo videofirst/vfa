@@ -1,6 +1,9 @@
 repositories {
     mavenLocal()
     mavenCentral()
+//    maven {
+//        url "https://repo.repsy.io/mvn/videofirst/vfa"
+//    }
 }
 
 apply plugin: "java"
@@ -9,29 +12,33 @@ apply plugin: "idea"
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-tasks.withType(JavaCompile) {
-    options.encoding = 'UTF-8'
-}
-
 group = 'io.vfa.examples'
 version = "$version"
 
 dependencies {
 
-//    testCompileOnly "org.projectlombok:lombok:1.18.20"
-//    testAnnotationProcessor "org.projectlombok:lombok:1.18.20"
+    implementation project(':core')
+    implementation project(':actions:web-selenide')
 
-    testAnnotationProcessor "io.videofirst.vfa:core:2021.1"
-    testImplementation "io.videofirst.vfa:core:2021.1"
-    testImplementation "io.videofirst.vfa.actions:web-selenide:2021.1"
+    // We need something like this for example project (maybe separate repo?)
+    //testAnnotationProcessor "io.videofirst.vfa:core:2021.1"
+    //testImplementation "io.videofirst.vfa:core:2021.1"
+    //testImplementation "io.videofirst.vfa.actions:web-selenide:2021.1"
 
 }
 
 compileJava.options.encoding = 'UTF-8'
 
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
 test {
     useJUnitPlatform()
     systemProperty "file.encoding", "utf-8"
+    testLogging {
+        showStandardStreams = true
+    }
 }
 
-
+// https://discuss.gradle.org/t/allow-configuring-of-the-test-showstandardstreams-logging/559/16

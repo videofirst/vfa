@@ -22,7 +22,6 @@ public class VfaStepInterceptor implements MethodInterceptor<Object, Object> {
 
     private static final String METHOD_STEP_START_REGEX = "^(given|when|then|and|but)_";
     private static final Pattern METHOD_STEP_AND_TEXT_VALIDATOR = Pattern.compile(METHOD_STEP_START_REGEX + "\\w+");
-    private static final boolean DEFAULT_ADD_QUOTES = true;
 
     @Inject
     private VfaService vfaService;

@@ -3,7 +3,6 @@ package io.videofirst.vfa.properties.model;
 import com.diogonunes.jcolor.Attribute;
 import io.videofirst.vfa.enums.VfaStatus;
 import io.videofirst.vfa.exceptions.VfaException;
-import io.videofirst.vfa.util.VfaMap;
 import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,33 +10,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 /**
- * Immutable VFA Theme.
+ * VFA Theme.
  */
-@Getter
 @Builder
 public class VfaTheme {
 
     // Constants
 
-    private static final String USE_COLOURS = "use-colours";
+    private static final String EXTENDS = "extends";
     private static final String LABELS = "labels";
     private static final String COLOURS = "colours";
 
-    private static final Map<String, String> DEFAULT_LABELS = VfaMap.of("status-passed", "√",
-        "status-failed", "X",
-        "status-error", "!",
-        "status-ignored", "");
-
     private static final Pattern HEX_COLOR_VALIDATOR = Pattern.compile("^#(?:[0-9a-fA-F]{3}){1,2}$");
 
-    // From properties
+    // Getter
 
+    @Getter
     private String name;
-    private boolean useColours;
+    @Getter
+    private String parentName;
+    @Getter
     private Map<String, String> labels;
+    @Getter
     private Map<String, Attribute> attributeColours;   // Parsed colour
+
+    // Setter + Getter
+
+    @Getter
+    @Setter
+    private VfaTheme parent;   // parent instance (populated when full list of themes is initialised)
 
     // Public static methods
 
@@ -46,15 +50,15 @@ public class VfaTheme {
      * (e.g. VfaTheme objects) which contains fields which are maps.
      */
     public static VfaTheme parse(String themeName, Map<String, Object> themeConfig) {
-        boolean useColours = parseBooleanField(themeConfig, USE_COLOURS, false);
-        Map<String, String> labels = parseMapStringField(themeConfig, LABELS, DEFAULT_LABELS);
+        String parentName = parseStringField(themeConfig, EXTENDS, null);
+        Map<String, String> labels = parseMapStringField(themeConfig, LABELS, new HashMap<>());
         Map<String, Object> colours = themeConfig.containsKey(COLOURS) && themeConfig.get(COLOURS) instanceof Map ?
-            (Map) themeConfig.get(COLOURS) : null;
+            (Map) themeConfig.get(COLOURS) : new HashMap<>();
 
         // Create new them and return
         VfaTheme theme = VfaTheme.builder()
             .name(themeName)
-            .useColours(useColours)
+            .parentName(parentName)
             .labels(labels)
             .attributeColours(parseAttributeColours(colours))
             .build();
@@ -98,11 +102,7 @@ public class VfaTheme {
     // Public methods
 
     public Attribute getColourAttribute(String themeColour) {
-        if (!attributeColours.containsKey(themeColour)) {
-            throw new VfaException(
-                "Theme colour [ " + themeColour + " ] - does not exist in theme [ " + this.name + " ]");
-        }
-        return attributeColours.get(themeColour);
+        return attributeColours.containsKey(themeColour) ? attributeColours.get(themeColour) : null;
     }
 
     public String getLabel(VfaStatus status) {
@@ -112,15 +112,38 @@ public class VfaTheme {
 
     // Private methods
 
-    private static boolean parseBooleanField(Map<String, Object> themeConfig, String field, boolean defaultValue) {
-        return themeConfig.containsKey(field) && themeConfig.get(field) instanceof Boolean ?
-            (Boolean) themeConfig.get(field) : defaultValue;
+    private static String parseStringField(Map<String, Object> themeConfig, String field, String defaultValue) {
+        return themeConfig.containsKey(field) && themeConfig.get(field) instanceof String ?
+            (String) themeConfig.get(field) : defaultValue;
     }
 
     private static Map<String, String> parseMapStringField(Map<String, Object> themeConfig, String field,
         Map<String, String> defaultValue) {
         return themeConfig.containsKey(field) && themeConfig.get(field) instanceof Map ?
             (Map) themeConfig.get(field) : defaultValue;
+    }
+
+    public void inheritFields(VfaTheme parent) {
+        if (parent == null) {
+            return;
+        }
+
+        // Inherit attribute colours from parent theme
+        if (parent.getAttributeColours() != null) {
+            parent.getAttributeColours().entrySet().stream().forEach(ac -> {
+                if (this.attributeColours.get(ac.getKey()) == null) { // only set if null in theme
+                    this.attributeColours.put(ac.getKey(), ac.getValue());
+                }
+            });
+        }
+        // Inherit labels from parent theme
+        if (parent.getLabels() != null) {
+            parent.getLabels().entrySet().stream().forEach(l -> {
+                if (this.labels.get(l.getKey()) == null) { // only set if null in theme
+                    this.labels.put(l.getKey(), l.getValue());
+                }
+            });
+        }
     }
 
 }

@@ -23,16 +23,16 @@ import io.WebActions;
 
 import javax.inject.Inject;
 
-@Feature                                                                // 1) @Feature marks class as a VFA feature 
+@Feature                                                 //  @Feature marks class as a VFA feature 
 public class SearchFilms {
 
     @Inject
     private WebActions web;
 
-    @Scenario                                                           // 2) @Scenario marks method as a VFA scenario
+    @Scenario                                            // @Scenario marks method as a VFA scenario
     public void search_for_film_The_Green_Mile() {
-        given("a user is at the homepage");                             // 3) Static method creates high-level VFA step
-        web.open("https://www.imdb.com");                               // 4) This method runs a low-level VFA action 
+        given("a user is at the homepage");              // Static method creates high-level VFA step
+        web.open("https://www.imdb.com");                // This method runs a low-level VFA action 
 
         when("the user types the \"The Green Mile\" into search box");
         web.type("id=suggestion-search", "The Green Mile");
@@ -93,7 +93,7 @@ interface tests. These problems included: -
   </thead>
   <tbody>
     <tr>
-      <td nowrap><b>1. Getting Started</b></tdnowrap>
+      <td nowrap><b>1. Getting Started</b></td>
       <td>Creating a new UI test automation project can take a considerable amount of time.</td>
       <td>VFA provides a starter GitHub project to quickly get started (a project generator is also coming soon).</td>
     </tr>  

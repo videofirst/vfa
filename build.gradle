@@ -1,25 +1,87 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
     }
 }
 
-allprojects {
+plugins {
+    id "io.micronaut.library" version "2.0.8" apply false
+}
+
+subprojects {
+
+    apply plugin: 'maven-publish'
+    apply plugin: 'io.micronaut.library'
+
     version = "$version"
-    ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
     repositories {
         mavenLocal()
         mavenCentral()
     }
 
-    apply plugin: 'maven-publish'
-}
-
-subprojects {
     ext {
         micronautVersion = '3.1.1'
         micronautTestVersion = '2.3.7'
     }
+
+    publishing {
+        publications {
+            mavenJava(MavenPublication) {
+                from components.java
+
+                pom {
+                    name = project.name
+                    url = 'https://github.com/videofirst/vfa'
+                    // to be able use project.description which may be overridden in later executed build.gradle of subproject
+                    afterEvaluate {
+                        description = project.description
+                    }
+                    withXml {
+                        project.configurations.compileOnly.allDependencies.each { dep ->
+                            asNode().dependencies[0].appendNode('dependency').with {
+                                it.appendNode('groupId', dep.group)
+                                it.appendNode('artifactId', dep.name)
+                                it.appendNode('version', dep.version)
+                                it.appendNode('scope', 'provided')
+                            }
+                        }
+                    }
+
+                    scm {
+                        url = 'scm:git@github.com:videofirst/vfa.git'
+                        connection = 'scm:git@github.com:videofirst/vfa.git'
+                        developerConnection = 'scm:git@github.com:videofirst/vfa.git'
+                    }
+
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+                            distribution = 'repo'
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id = 'bobmarks'
+                            name = 'Bob Marks'
+                        }
+                    }
+                }
+
+            }
+        }
+        repositories {
+            mavenLocal()
+            maven {
+                url "https://repo.repsy.io/mvn/videofirst/vfa"
+                credentials {
+                    username REPSY_USERNAME
+                    password REPSY_PASSWORD
+                }
+            }
+        }
+    }
+
 }

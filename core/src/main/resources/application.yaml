@@ -24,8 +24,7 @@ vfa:
 
   reports:
 
-    # What type of media?  Currently supports "screenshots", will support"video" in
-    # the future
+    # Media type. Supports "screenshots" with "video" coming soon.
     media: screenshots
 
     # Folder where report assets are stored
@@ -83,7 +82,7 @@ vfa:
     level: action
 
     # Which theme to display (plain, standard)
-    theme: standard
+    theme: dark
 
     # Max level of actions to show (-1 = no limit)
     action-depth: 2
@@ -106,26 +105,21 @@ vfa:
     ignore-aliases:
       - "web"
 
-    # Themes (based loosely on https://github.com/radarsh/gradle-test-logger-plugin)
+    # Theme definitions.  New themes can be added by inheriting existing themes (and tweaking colours / labels) or
+    # completely from scratch.
     themes:
 
-      # Plain theme (no colours / uni-code characters)
+      # Plain theme (no colours and uses standard characters)
       plain:
-        use-colours: false
         labels:
-          status-passed: "√"
+          status-passed: ""
           status-failed: "X"
           status-error: "!"
           status-ignored: ""
 
-      # Standard theme (colours + uni-code characters)
-      standard:
-        use-colours: true
-        labels:
-          status-passed: "✔"
-          status-failed: "✘"
-          status-error: "❗"
-          status-ignored: ""
+      # Dark theme
+      dark:
+        extends: plain
         colours:
           feature-label: "#9999ee"
           feature-colon: "#666666"
@@ -155,6 +149,11 @@ vfa:
           status-ignored: "#777777"
           right-colon: "#666666"
 
-          #step-param-string: "#cc7733"    # orange
-          #action-param-other: "#ffcc66"   # yellow
-          #action-param-other: "#6699bb"  blue
+      # Deluxe theme (colours + uni-code characters)
+      dark-deluxe:
+        extends: dark
+        labels:
+          status-passed: "✔"
+          status-failed: "✘"
+          status-error: "❗"
+          status-ignored: ""
