@@ -56,6 +56,9 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     private StringBuilder line = new StringBuilder();  // Pure text line
     private StringBuilder formattedLine = new StringBuilder(); // Formatted line
 
+    public DefaultVfaLogger() {
+    }
+
     @PostConstruct
     public void init() {
         this.theme = loggerConfig.getCurrentTheme();

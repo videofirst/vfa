@@ -24,7 +24,9 @@ subprojects {
         micronautVersion = '3.1.1'
         micronautTestVersion = '2.3.7'
     }
+    //println("-- project name " + it.name)
 
+    //if (it.name != 'imdb') { // ignore IMDB example project
     publishing {
         publications {
             mavenJava(MavenPublication) {
@@ -83,5 +85,6 @@ subprojects {
             }
         }
     }
+    //}
 
 }

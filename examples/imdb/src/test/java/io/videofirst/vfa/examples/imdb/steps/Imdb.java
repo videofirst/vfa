@@ -24,8 +24,8 @@ public class Imdb extends Steps<Imdb> {
         web.open(homepage);
     }
 
-    public void when_a_user_searches_for(String input) {
-        when("I expect to see the results for film [ {0} ]", input);
+    public void when_a_user_searches_for(String film) {
+        when("I expect to see the results for film [ {0} ]", film);
         web.type("id=suggestion-search", "The Green Mile");
         web.click("#suggestion-search-button");
     }

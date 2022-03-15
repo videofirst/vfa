@@ -78,7 +78,7 @@ public class WebActions extends BaseSelenideActions {
         } else if (target.startsWith("name=")) {
             return By.name(removePrefix("name=", target));
         } else if (target.startsWith("css=")) {
-            return By.xpath(removePrefix("css", target));
+            return By.cssSelector(removePrefix("css", target));
         } else {
             // Assume that it's CSS ("css=" is an optional prefix)
             return By.cssSelector(target);

@@ -19,7 +19,7 @@ public class BasicSearchFilms {
 
     @Inject
     private WebActions web;
-
+    
     @Scenario(id = 23, text = "Search for Film \"The Green Mile\"")
     public void search_for_film_The_Green_Mile() {
         given("A user is at the homepage");

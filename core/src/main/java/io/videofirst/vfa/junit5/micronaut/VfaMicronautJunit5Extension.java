@@ -1,5 +1,8 @@
 package io.videofirst.vfa.junit5.micronaut;
 
+import static io.micronaut.context.env.Environment.BOOTSTRAP_CONTEXT_PROPERTY;
+import static io.micronaut.context.env.Environment.BOOTSTRAP_NAME_PROPERTY;
+
 import io.micronaut.context.annotation.Property;
 import io.micronaut.test.annotation.MicronautTestValue;
 import io.micronaut.test.context.TestContext;
@@ -25,8 +28,11 @@ import org.junit.platform.commons.support.AnnotationSupport;
 public class VfaMicronautJunit5Extension extends MicronautJunit5Extension implements
     TestExecutionExceptionHandler {
 
-    private static final ExtensionContext.Namespace NAMESPACE = ExtensionContext.Namespace
-        .create(VfaMicronautJunit5Extension.class);
+    {
+        // Enable Bootstrap configuration so shorter `vfa.yaml` can be used  
+        System.setProperty(BOOTSTRAP_CONTEXT_PROPERTY, "true");
+        System.setProperty(BOOTSTRAP_NAME_PROPERTY, "vfa");
+    }
 
     private VfaService vfaService;
     private VfaDisplayNameGenerator vfaDisplayNameGenerator = VfaDisplayNameGenerator.INSTANCE; // not currently using Micronaut injection

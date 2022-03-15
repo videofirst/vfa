@@ -6,6 +6,9 @@ repositories {
 //    }
 }
 
+// https://stackoverflow.com/a/59096967/1692179
+//tasks.publish.enabled = false
+
 apply plugin: "java"
 apply plugin: "idea"
 
@@ -17,8 +20,8 @@ version = "$version"
 
 dependencies {
 
-    implementation project(':core')
-    implementation project(':actions:web-selenide')
+    testImplementation project(':core')
+    testImplementation project(':actions:web-selenide')
 
     // We need something like this for example project (maybe separate repo?)
     //testAnnotationProcessor "io.videofirst.vfa:core:2021.1"
@@ -33,11 +36,18 @@ tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+project.tasks.publish.enabled = false
+
 test {
     useJUnitPlatform()
     systemProperty "file.encoding", "utf-8"
-    testLogging {
-        showStandardStreams = true
+    // FIXME - move this to a Gradle plugin
+    test {
+        onOutput { descriptor, event ->
+            if (event.destination == TestOutputEvent.Destination.StdOut) {
+                logger.lifecycle(event.message.replaceFirst(/\s+$/, ''))
+            }
+        }
     }
 }
 
