@@ -116,6 +116,12 @@ public class Vfa {
         vfaService.setStepText(text, options, paramValues);
     }
 
+    // Action methods
+
+    public static void action(String name) {
+        vfaService.action(name);
+    }
+
     // Private methods
 
     private static void step(StepType type) {

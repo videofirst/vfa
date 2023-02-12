@@ -62,7 +62,7 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     @PostConstruct
     public void init() {
         this.theme = loggerConfig.getCurrentTheme();
-        this.indentSpaces = repeat(TEXT_SPACE, loggerConfig.getIndentChars());
+        this.indentSpaces = "";//repeat(TEXT_SPACE, loggerConfig.getIndentChars());
     }
 
     // Override methods
@@ -139,9 +139,10 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     }
 
     protected void printFeatureTextAndId(VfaFeature feature) {
-        print(TEXT_FEATURE, COLOUR_FEATURE_LABEL);
-        print(TEXT_COLON, COLOUR_FEATURE_COLON);
-        print(feature.getText(), COLOUR_FEATURE_TEXT);
+//        print(TEXT_FEATURE, COLOUR_FEATURE_LABEL);
+//        print(TEXT_COLON, COLOUR_FEATURE_COLON);
+//        print(feature.getText(), COLOUR_FEATURE_TEXT);
+        print("# " + feature.getText(), COLOUR_FEATURE_LABEL);
 
         if (feature.getId() != NONE) {
             printRightColon();
@@ -162,9 +163,10 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     protected void printScenarioTextAndId(VfaScenario scenario) {
         resetLine(); // reset from a potential previous scenario
         print(indentSpaces);
-        print(TEXT_SCENARIO, COLOUR_SCENARIO_LABEL);
-        print(TEXT_COLON, COLOUR_SCENARIO_COLON);
-        print(scenario.getText(), COLOUR_SCENARIO_TEXT);
+        //print(TEXT_SCENARIO, COLOUR_SCENARIO_LABEL);
+        //print(TEXT_COLON, COLOUR_SCENARIO_COLON);
+        //print(scenario.getText(), COLOUR_SCENARIO_TEXT);
+        print("## " + scenario.getText(), COLOUR_SCENARIO_LABEL);
         if (scenario.getId() != NONE) {
             printRightColon();
             print(String.valueOf(scenario.getId()), COLOUR_SCENARIO_ID);
@@ -281,17 +283,17 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
         // Print parameter
         boolean isFinished = action.isFinished();
 
-        print(TEXT_SPACE);
-        print(TEXT_BRACKET_OPEN, isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_BRACKETS);
+        //print(TEXT_SPACE);
+        //print(TEXT_BRACKET_OPEN, isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_BRACKETS);
         int index = 0;
         for (Map.Entry<String, Object> param : action.getParams().entrySet()) {
-            printActionParameterSeparator(action, index);
-
+            //printActionParameterSeparator(action, index);
+            print(TEXT_SPACE);
             Object paramValue = param.getValue();
             if (paramValue instanceof Object[]) { // Last parameter can be an array
                 Object[] array = (Object[]) paramValue;
                 for (Object arrayParamValue : array) {
-                    printActionParameterSeparator(action, index);
+                    //printActionParameterSeparator(action, index);
                     printActionParameterValue(action, arrayParamValue);
                     index++;
                 }
@@ -300,7 +302,7 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
                 index++;
             }
         }
-        print(TEXT_BRACKET_CLOSE, isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_BRACKETS);
+        //print(TEXT_BRACKET_CLOSE, isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_BRACKETS);
         print(TEXT_SPACE);
     }
 
@@ -314,9 +316,12 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     protected void printActionParameterValue(VfaAction action, Object paramValue) {
         boolean isFinished = action.isFinished();
         if (paramValue instanceof String) {
-            String quotedParamValue = VfaUtils.quote((String) paramValue);
-            print(quotedParamValue,
-                isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_STRING_PARAM);
+            String stringParamValue = (String) paramValue;
+            if (stringParamValue.contains(" ")) {
+                stringParamValue = "`" + stringParamValue + "`";
+            }
+            print(stringParamValue, isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_STRING_PARAM);
+
         } else {
             print(String.valueOf(paramValue),
                 isFinished ? COLOUR_ACTION_IGNORED : COLOUR_ACTION_OTHER_PARAM);
@@ -422,13 +427,10 @@ public class DefaultVfaLogger implements VfaLogger, VfaThemeColours {
     protected void print(String input, String themeColour) {
         line.append(input);
         if (themeColour != null && theme.getColourAttribute(themeColour) != null) {
-            //System.out.print(colorize(input, attribute));   // real-time but strangeness with Gradle
             formattedLine.append(colorize(input, theme.getColourAttribute(themeColour)));
         } else {
-            //System.out.print(input);       // real-time but strangeness with Gradle
             formattedLine.append(input);
         }
-        //System.out.flush();         // real-time but strangeness with Gradle
     }
 
     protected void println() {

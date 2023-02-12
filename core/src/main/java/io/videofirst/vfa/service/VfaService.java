@@ -248,4 +248,7 @@ public class VfaService {
         return exceptionService.getVfaError(throwable);
     }
 
+    public void action(String name) {
+        // TODO
+    }
 }

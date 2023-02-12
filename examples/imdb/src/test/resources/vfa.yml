@@ -46,6 +46,7 @@ vfa:
       - "com\\.sun.*"
       - "com\\.intellij.*"
       - "org\\.gradle\\..*"
+      - "worker.*GradleWorker.*"
       - ".*\\.\\$\\w+\\$.*"     # Synthetic classes
       - ".*convertThrowable.*"
       - "com\\.codeborne\\.selenide.*"

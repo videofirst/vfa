@@ -1,25 +1,24 @@
 package io.videofirst.vfa.examples.imdb;
 
-import static io.videofirst.vfa.Vfa.and;
-import static io.videofirst.vfa.Vfa.given;
-import static io.videofirst.vfa.Vfa.then;
-import static io.videofirst.vfa.Vfa.when;
+import static io.videofirst.vfa.Vfa.action;
+import static io.videofirst.vfa.Vfa.step;
 
 import io.videofirst.vfa.Feature;
 import io.videofirst.vfa.Scenario;
+import io.videofirst.vfa.Steps;
 import io.videofirst.vfa.examples.imdb.steps.Imdb;
 import io.videofirst.vfa.web.actions.selenide.WebActions;
 import jakarta.inject.Inject;
 
 @Feature(id = 11, description = "Search for films in a variety of different ways")
-public class BasicSearchFilms {
+public class BasicSearchFilms extends Steps<BasicSearchFilms> {
 
     @Inject
     private Imdb imdb;
 
     @Inject
     private WebActions web;
-    
+
     @Scenario(id = 23, text = "Search for Film \"The Green Mile\"")
     public void search_for_film_The_Green_Mile() {
         given("A user is at the homepage");
@@ -60,6 +59,35 @@ public class BasicSearchFilms {
 
             .then().I_expect_to_see_the_results_for_film(film)
             .and().the_top_results_only_contains_$(film);
+    }
+
+    @Scenario
+    public void search_for_film_The_Green_Mile_v4() {
+        String film = "The Green Mile";
+        given().a_user_is_at_the_homepage();
+
+        imdb.when().a_user_searches_for_$(film)
+            .then().I_expect_to_see_the_results_for_film(film)
+            .and().the_top_results_only_contains_$(film);
+    }
+
+    // Private methods
+
+    // EXAMPLE OF STEP INSIDE FEATURE CLASS
+
+    private BasicSearchFilms a_user_is_at_the_homepage() {
+        step("a user is at the homepage");
+        //imdb.open_homepage();
+        open_homepage();
+        return this;
+    }
+
+    // EXAMPLE OF ACTION INSIDE FEATURE CLASS
+
+    private BasicSearchFilms open_homepage() {
+        action("open_homepage");
+        web.open("https://www.imdb.com");
+        return this;
     }
 
 }

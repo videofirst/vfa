@@ -6,7 +6,6 @@ import io.micronaut.context.annotation.Factory;
 import io.micronaut.context.annotation.Requires;
 import io.micronaut.test.annotation.TransactionMode;
 import io.micronaut.test.condition.TestActiveCondition;
-import io.videofirst.vfa.junit5.micronaut.VfaDisplayNameGenerator;
 import io.videofirst.vfa.junit5.micronaut.VfaMicronautJunit5Extension;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Inherited;
@@ -14,6 +13,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -26,7 +26,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @Requires(condition = TestActiveCondition.class)
 @Executable
 @TestMethodOrder(MethodOrderer.MethodName.class) // TODO create custom order field in @Scenario - otherwise revert
-@DisplayNameGeneration(VfaDisplayNameGenerator.class)
+// DONT THINK WE SHOULD DO THIS BECAUSE INTELIIJ CANT JUMPT TO SOURCE
+// https://youtrack.jetbrains.com/issue/IDEA-266508/Navigating-to-source-on-a-JUnit-test-with-a-display-name-that-differs-from-test-name-does-not-work
+//@DisplayNameGeneration(VfaDisplayNameGenerator.class)
+@DisplayNameGeneration(DisplayNameGenerator.Simple.class)
 public @interface Feature {
 
     // Video First annotations
